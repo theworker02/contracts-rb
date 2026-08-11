@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+## 0.3.0 - 2026-08-11
+
+- Enforce `must_change` `from:` and `to:` bounds for scalar and array values.
+- Raise `Contracts::MutationViolation` when required change bounds fail.
+
 ## 0.2.0 - 2026-08-04
 
 - Added `Contracts::Constraints::Tuple` for fixed-length heterogeneous arrays.
