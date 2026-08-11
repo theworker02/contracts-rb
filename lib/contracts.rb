@@ -763,9 +763,7 @@ module Contracts
       return if report.passed? && bounds_violations.empty?
 
       parts = []
-      unless report.passed?
-        parts << "unexpected changes: #{report.unexpected_changes.join(', ')}; missing changes: #{report.missing_required_changes.join(', ')}"
-      end
+      parts << "unexpected changes: #{report.unexpected_changes.join(', ')}; missing changes: #{report.missing_required_changes.join(', ')}" unless report.passed?
       parts.concat(bounds_violations)
       fail!(MutationViolation, context,
             description: parts.join("; "), expected: permitted, actual: report.to_h)
@@ -777,12 +775,8 @@ module Contracts
 
         from = bounds[:from]
         to = bounds[:to]
-        if from && !bound_value_matches?(before[field], from)
-          violations << "#{field} must change from #{bound_description(from)} (was #{bound_value_label(before[field])})"
-        end
-        if to && !bound_value_matches?(after[field], to)
-          violations << "#{field} must change to #{bound_description(to)} (got #{bound_value_label(after[field])})"
-        end
+        violations << "#{field} must change from #{bound_description(from)} (was #{bound_value_label(before[field])})" if from && !bound_value_matches?(before[field], from)
+        violations << "#{field} must change to #{bound_description(to)} (got #{bound_value_label(after[field])})" if to && !bound_value_matches?(after[field], to)
       end
     end
 
@@ -794,11 +788,11 @@ module Contracts
     end
 
     def bound_description(bound)
-      bound.is_a?(Array) ? bound.inspect : bound.inspect
+      bound.inspect
     end
 
     def bound_value_label(value)
-      value.is_a?(Symbol) ? value.inspect : value.inspect
+      value.inspect
     end
 
     def check_contract_invariants(receiver, _contract, context, _phase)
