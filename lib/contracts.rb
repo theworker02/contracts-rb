@@ -345,6 +345,10 @@ module Contracts
     def permitted_changes=(values)
       @permitted_changes = values.map(&:to_sym).freeze
     end
+
+    def required_change_bounds
+      @required_change_bounds || {}.freeze
+    end
   end
 
   class ContractBuilder
@@ -386,9 +390,12 @@ module Contracts
     end
 
     def must_change(*attributes, from: nil, to: nil)
-      # Retain range constraints for the public DSL; enforcement is intentionally deferred.
       validate_mutation_mode!(:must_change)
-      @contract.instance_variable_set(:@required_change_bounds, { attributes: attributes.map(&:to_sym), from: from, to: to }.freeze)
+      bounds = @contract.instance_variable_get(:@required_change_bounds) || {}
+      attributes.each do |attribute|
+        bounds[attribute.to_sym] = { from: from, to: to }.freeze
+      end
+      @contract.instance_variable_set(:@required_change_bounds, bounds.freeze)
       observe(*attributes.reject do |attribute|
         @contract.observed.any? do |item|
           item.name == attribute.to_sym
@@ -752,10 +759,46 @@ module Contracts
       report = MutationReport.new(before: context.before, after: after, permitted: permitted, required: contract.required_changes, observations: contract.observed.to_h do |item|
         [item.name, item]
       end)
-      return if report.passed?
+      bounds_violations = required_change_bound_violations(contract, context.before, after, report)
+      return if report.passed? && bounds_violations.empty?
 
+      parts = []
+      unless report.passed?
+        parts << "unexpected changes: #{report.unexpected_changes.join(', ')}; missing changes: #{report.missing_required_changes.join(', ')}"
+      end
+      parts.concat(bounds_violations)
       fail!(MutationViolation, context,
-            description: "unexpected changes: #{report.unexpected_changes.join(', ')}; missing changes: #{report.missing_required_changes.join(', ')}", expected: permitted, actual: report.to_h)
+            description: parts.join("; "), expected: permitted, actual: report.to_h)
+    end
+
+    def required_change_bound_violations(contract, before, after, report)
+      contract.required_change_bounds.each_with_object([]) do |(field, bounds), violations|
+        next unless report.changed_fields.include?(field)
+
+        from = bounds[:from]
+        to = bounds[:to]
+        if from && !bound_value_matches?(before[field], from)
+          violations << "#{field} must change from #{bound_description(from)} (was #{bound_value_label(before[field])})"
+        end
+        if to && !bound_value_matches?(after[field], to)
+          violations << "#{field} must change to #{bound_description(to)} (got #{bound_value_label(after[field])})"
+        end
+      end
+    end
+
+    def bound_value_matches?(value, bound)
+      case bound
+      when Array then bound.any? { |item| equal_state?(value, item) }
+      else equal_state?(value, bound)
+      end
+    end
+
+    def bound_description(bound)
+      bound.is_a?(Array) ? bound.inspect : bound.inspect
+    end
+
+    def bound_value_label(value)
+      value.is_a?(Symbol) ? value.inspect : value.inspect
     end
 
     def check_contract_invariants(receiver, _contract, context, _phase)
