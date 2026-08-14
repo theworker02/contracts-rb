@@ -282,6 +282,59 @@ module Contracts
       def description = "nothing"
     end
 
+    class All < Base
+      def initialize(*items) = @items = items.map { |item| Constraints.coerce(item) }
+      def matches?(value) = @items.all? { |item| item.matches?(value) }
+      def description = @items.map(&:description).join(" and ")
+      def to_h = super.merge(items: @items.map(&:description))
+    end
+
+    class Length < Base
+      attr_reader :min, :max
+
+      def initialize(min: nil, max: nil, exactly: nil)
+        if exactly
+          raise DefinitionError, "length exactly cannot be combined with min or max" unless min.nil? && max.nil?
+
+          @min = @max = Integer(exactly)
+        else
+          @min = min && Integer(min)
+          @max = max && Integer(max)
+        end
+        raise DefinitionError, "length requires min, max, or exactly" if @min.nil? && @max.nil?
+        raise DefinitionError, "length min cannot exceed max" if @min && @max && @min > @max
+      end
+
+      def matches?(value)
+        size = length_of(value)
+        return false unless size
+        return false if min && size < min
+        return false if max && size > max
+
+        true
+      end
+
+      def description
+        return "length #{min}" if min && max && min == max
+        return "length >= #{min}" if min && max.nil?
+        return "length <= #{max}" if max && min.nil?
+
+        "length #{min}..#{max}"
+      end
+
+      def to_h = super.merge(min: min, max: max)
+
+      private
+
+      def length_of(value)
+        return nil if value.is_a?(Numeric)
+        return value.length if value.respond_to?(:length)
+        return value.size if value.respond_to?(:size)
+
+        nil
+      end
+    end
+
     module_function
 
     def coerce(value) = value.respond_to?(:matches?) && value.respond_to?(:description) ? value : Type.new(value)
@@ -527,6 +580,8 @@ module Contracts
     def duck_type(*methods) = Constraints::DuckType.new(*methods)
     def anything = Constraints::Anything.new
     def nothing = Constraints::Nothing.new
+    def all(*items) = Constraints::All.new(*items)
+    def length(min: nil, max: nil, exactly: nil) = Constraints::Length.new(min: min, max: max, exactly: exactly)
 
     def invoke(receiver, contract, args, kwargs, block)
       return yield unless active?(contract, receiver, args, kwargs)

@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+## 0.4.0 - 2026-08-14
+
+- Added `Contracts.all` to require every nested constraint to match.
+- Added `Contracts.length(min:, max:, exactly:)` for String, Array, Hash, and other sized values.
+
 ## 0.3.0 - 2026-08-11
 
 - Enforce `must_change` `from:` and `to:` bounds for scalar and array values.

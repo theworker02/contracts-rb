@@ -42,3 +42,11 @@ OpenPayload = Contracts::Constraints.shape(
 ```
 
 Both constraints implement the normal Contracts-rb constraint interface: `matches?`, `description`, and `to_h`.
+
+`Contracts.all` and `Contracts.length` live on the core gem (no extra require) for conjunctions and sized values:
+
+```ruby
+Contracts.all(String, Contracts.matching(/\A[A-Z]/)).matches?("OK")
+Contracts.length(min: 2, max: 4).matches?("ab")
+```
+

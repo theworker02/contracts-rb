@@ -52,7 +52,7 @@ class Account
 end
 ```
 
-Constraints include `Contracts.nilable`, `any`, `matching`, `range`, `one_of`, `array_of`, `hash_of`, `respond_to`, `duck_type`, `anything`, `nothing`, and `predicate`.
+Constraints include `Contracts.nilable`, `any`, `all`, `matching`, `range`, `one_of`, `array_of`, `hash_of`, `length`, `respond_to`, `duck_type`, `anything`, `nothing`, and `predicate`.
 
 ## Stateful contracts
 
@@ -69,7 +69,8 @@ Use `observe` to capture relevant receiver fields; `changes` permits a subset, `
 | `one_of` | `Contracts.one_of(:draft, :published)` | one literal value |
 | `array_of` | `Contracts.array_of(String)` | array whose elements match |
 | `hash_of` | `Contracts.hash_of(Symbol, Numeric)` | hash with matching keys/values |
-| `predicate` | `Contracts.predicate("valid ID") { ... }` | custom runtime rule |
+| `all` | `Contracts.all(String, Contracts.matching(/A/))` | every nested constraint matches |
+| `length` | `Contracts.length(min: 1, max: 80)` | `size`/`length` within bounds |
 
 ## Runtime configuration
 
