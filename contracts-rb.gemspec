@@ -1,6 +1,6 @@
 Gem::Specification.new do |spec|
   spec.name = "contracts-rb"
-  spec.version = "0.3.0"
+  spec.version = "0.4.0"
   spec.authors = ["Magnexis"]
   spec.summary = "Behavioral contracts for Ruby methods and objects"
   spec.description = "Expressive runtime contracts for parameters, results, state, invariants, exceptions, tuples, and structured hash shapes."
