@@ -11,7 +11,8 @@ on:
         type: string
 
 permissions:
-  contents: read
+  contents: write
+  id-token: write
 
 concurrency:
   group: release-${{ github.event_name == 'workflow_dispatch' && inputs.confirm_version || github.ref_name }}
@@ -90,11 +91,84 @@ jobs:
             echo "exists=false" >> "$GITHUB_OUTPUT"
           fi
 
-      - name: Publish to RubyGems
+      - name: Configure RubyGems trusted publishing
         if: steps.published.outputs.exists != 'true'
-        uses: rubygems/release-gem@v1
+        uses: rubygems/configure-rubygems-credentials@v2.1.0
+
+      - name: Publish gem
+        if: steps.published.outputs.exists != 'true'
+        env:
+          RELEASE_VERSION: ${{ steps.release.outputs.version }}
+        run: gem push "pkg/contracts-rb-${RELEASE_VERSION}.gem"
 
       - name: Create or refresh GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ steps.release.outputs.tag }}
+          RELEASE_VERSION: ${{ steps.release.outputs.version }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          GEM_PATH="pkg/contracts-rb-${RELEASE_VERSION}.gem"
+          if gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
+            gh release upload "$RELEASE_TAG" "$GEM_PATH" --clobber
+          else
+            gh release create "$RELEASE_TAG" "$GEM_PATH" --verify-tag --generate-notes --title "Contracts-rb ${RELEASE_VERSION}"
+          fi
+
+  # Retry OIDC publish if the RubyGems publisher was created without an environment.
+  publish-without-environment:
+    if: failure()
+    needs: release
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write
+      id-token: write
+    steps:
+      - name: Resolve release version
+        id: release
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ "$GITHUB_EVENT_NAME" = "push" ]; then
+            TAG="$GITHUB_REF_NAME"
+            VERSION="${TAG#v}"
+          else
+            VERSION="${{ inputs.confirm_version }}"
+            TAG="v${VERSION}"
+          fi
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+
+      - name: Check out release tag
+        uses: actions/checkout@v5
+        with:
+          ref: ${{ steps.release.outputs.tag }}
+          fetch-depth: 0
+          persist-credentials: false
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.4"
+          bundler-cache: true
+
+      - name: Build gem
+        env:
+          RELEASE_VERSION: ${{ steps.release.outputs.version }}
+        run: |
+          mkdir -p pkg
+          gem build contracts-rb.gemspec --output "pkg/contracts-rb-${RELEASE_VERSION}.gem"
+
+      - name: Configure RubyGems trusted publishing
+        uses: rubygems/configure-rubygems-credentials@v2.1.0
+
+      - name: Publish gem
+        env:
+          RELEASE_VERSION: ${{ steps.release.outputs.version }}
+        run: gem push "pkg/contracts-rb-${RELEASE_VERSION}.gem"
+
+      - name: Refresh GitHub release
         env:
           GH_TOKEN: ${{ github.token }}
           RELEASE_TAG: ${{ steps.release.outputs.tag }}
