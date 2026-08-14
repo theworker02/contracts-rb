@@ -1,21 +1,21 @@
 # contracts-rb
 
 [![Gem Version](https://badge.fury.io/rb/contracts-rb.svg)](https://rubygems.org/gems/contracts-rb)
-[![CI](https://github.com/magnexis/contracts-rb/actions/workflows/ci.yml/badge.svg)](https://github.com/magnexis/contracts-rb/actions/workflows/ci.yml)
+[![CI](https://github.com/theworker02/contracts-rb/actions/workflows/ci.yml/badge.svg)](https://github.com/theworker02/contracts-rb/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE.txt)
 [![Ruby 3.1+](https://img.shields.io/badge/Ruby-3.1%2B-CC342D.svg)](https://www.ruby-lang.org/)
 
 <p align="center">
-  <a href="https://github.com/magnexis/contracts-rb">
+  <a href="https://github.com/theworker02/contracts-rb">
     <img src="assets/contracts-rb-logo.png" alt="contracts-rb" width="760">
   </a>
 </p>
 
 `contracts-rb` adds small, explicit behavioral contracts to Ruby without imposing a type system. It supports parameter and return constraints, preconditions, postconditions, object invariants, state snapshots, mutation policies, exception declarations, introspection, and a dependency-free CLI.
 
-**Official repository:** [github.com/magnexis/contracts-rb](https://github.com/magnexis/contracts-rb)
+**Official repository:** [github.com/theworker02/contracts-rb](https://github.com/theworker02/contracts-rb)
 
-**RubyGems:** [rubygems.org/gems/contracts-rb](https://rubygems.org/gems/contracts-rb)
+**RubyGems:** [rubygems.org/gems/contracts-rb](https://rubygems.org/gems/contracts-rb) · current: [0.4.0](https://rubygems.org/gems/contracts-rb/versions/0.4.0)
 
 ## Why contracts-rb?
 
@@ -23,10 +23,10 @@ Ruby tests describe expected examples; contracts keep critical method promises e
 
 ## Install
 
-Install the official package from [RubyGems: `contracts-rb`](https://rubygems.org/gems/contracts-rb).
+Install the official package from [RubyGems: `contracts-rb`](https://rubygems.org/gems/contracts-rb) ([0.4.0](https://rubygems.org/gems/contracts-rb/versions/0.4.0)).
 
 ```ruby
-gem "contracts-rb", "~> 0.1"
+gem "contracts-rb", "~> 0.4"
 require "contracts"
 ```
 
@@ -122,7 +122,7 @@ Ruby 3.1+. Rails is optional. The core is plain Ruby and has no runtime dependen
 
 ## Limitations
 
-0.1.0 wraps declared instance methods directly; its explicit singleton API is experimental. Deep snapshots, static implication proofs for inheritance, and Rails instrumentation are intentionally deferred.
+0.4.0 wraps declared instance methods at definition time. The explicit singleton API (`contract_singleton` / `extend Contracts`) remains experimental. Static implication proofs for inheritance and deeper Rails instrumentation are intentionally deferred. Deep snapshots (`observe …, deep: true`) are supported for arrays, hashes, and sets.
 
 ## Development
 
@@ -136,7 +136,7 @@ MIT licensed. See [CONTRIBUTING.md](CONTRIBUTING.md) and [SECURITY.md](SECURITY.
 
 ## Release process
 
-Maintainers validate with `bundle exec rubocop .`, `bundle exec rspec`, and `bundle exec rake build`. The resulting `contracts-rb-<version>.gem` is attached to the matching GitHub release and published through an authenticated RubyGems session.
+Maintainers validate with `bundle exec rubocop .`, `bundle exec rspec`, and `bundle exec rake build`. Pushing a `v*` tag runs [`.github/workflows/release.yml`](.github/workflows/release.yml), which publishes via [RubyGems Trusted Publishing](https://guides.rubygems.org/trusted-publishing/) (OIDC) and attaches `contracts-rb-<version>.gem` to the GitHub release.
 
 ## Benchmark methodology
 
