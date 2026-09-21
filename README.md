@@ -1,8 +1,8 @@
-# contracts-rb
+﻿# contracts-rb
 
 [![Gem Version](https://badge.fury.io/rb/contracts-rb.svg)](https://rubygems.org/gems/contracts-rb)
 [![CI](https://github.com/theworker02/contracts-rb/actions/workflows/ci.yml/badge.svg)](https://github.com/theworker02/contracts-rb/actions/workflows/ci.yml)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE.txt)
+[![License: MIT](https://img.shields.io/badge/license-Proprietary%20(source--available)-yellow.svg)](LICENSE.txt)
 [![Ruby 3.1+](https://img.shields.io/badge/Ruby-3.1%2B-CC342D.svg)](https://www.ruby-lang.org/)
 
 <p align="center">
@@ -15,7 +15,7 @@
 
 **Official repository:** [github.com/theworker02/contracts-rb](https://github.com/theworker02/contracts-rb)
 
-**RubyGems:** [rubygems.org/gems/contracts-rb](https://rubygems.org/gems/contracts-rb) · current: [0.4.0](https://rubygems.org/gems/contracts-rb/versions/0.4.0)
+**RubyGems:** [rubygems.org/gems/contracts-rb](https://rubygems.org/gems/contracts-rb) Â· current: [0.4.0](https://rubygems.org/gems/contracts-rb/versions/0.4.0)
 
 ## Why contracts-rb?
 
@@ -122,7 +122,7 @@ Ruby 3.1+. Rails is optional. The core is plain Ruby and has no runtime dependen
 
 ## Limitations
 
-0.4.0 wraps declared instance methods at definition time. The explicit singleton API (`contract_singleton` / `extend Contracts`) remains experimental. Static implication proofs for inheritance and deeper Rails instrumentation are intentionally deferred. Deep snapshots (`observe …, deep: true`) are supported for arrays, hashes, and sets.
+0.4.0 wraps declared instance methods at definition time. The explicit singleton API (`contract_singleton` / `extend Contracts`) remains experimental. Static implication proofs for inheritance and deeper Rails instrumentation are intentionally deferred. Deep snapshots (`observe â€¦, deep: true`) are supported for arrays, hashes, and sets.
 
 ## Development
 
@@ -141,3 +141,7 @@ Maintainers validate with `bundle exec rubocop .`, `bundle exec rspec`, and `bun
 ## Benchmark methodology
 
 Run `bundle exec ruby benchmark/runtime_overhead.rb` on the deployment Ruby and hardware. Compare the included uncontracted and parameter/return-contracted methods; do not extrapolate those measurements to contracts that capture state or execute expensive predicates.
+
+## License
+
+**Source-available proprietary** — evaluation under [LICENSE](./LICENSE); commercial / production use via [COMMERCIAL.md](./COMMERCIAL.md). See [LICENSE_TRANSITION_NOTICE.md](./LICENSE_TRANSITION_NOTICE.md).
