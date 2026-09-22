@@ -1,4 +1,12 @@
-﻿# contracts-rb
+# contracts-rb
+
+
+---
+
+## License & acquisition
+
+This project is **proprietary**. Production use, redistribution, and commercial deployment require a written commercial license or completed acquisition. See [LICENSE](./LICENSE) and [ACQUISITION.md](./ACQUISITION.md). Contact [@theworker02](https://github.com/theworker02).
+
 
 [![Gem Version](https://badge.fury.io/rb/contracts-rb.svg)](https://rubygems.org/gems/contracts-rb)
 [![CI](https://github.com/theworker02/contracts-rb/actions/workflows/ci.yml/badge.svg)](https://github.com/theworker02/contracts-rb/actions/workflows/ci.yml)
