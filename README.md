@@ -23,7 +23,7 @@ This project is **proprietary**. Production use, redistribution, and commercial 
 
 **Official repository:** [github.com/theworker02/contracts-rb](https://github.com/theworker02/contracts-rb)
 
-**RubyGems:** [rubygems.org/gems/contracts-rb](https://rubygems.org/gems/contracts-rb) Â· current: [0.4.0](https://rubygems.org/gems/contracts-rb/versions/0.4.0)
+**RubyGems:** [rubygems.org/gems/contracts-rb](https://rubygems.org/gems/contracts-rb) Ã‚Â· current: [0.4.0](https://rubygems.org/gems/contracts-rb/versions/0.4.0)
 
 ## Why contracts-rb?
 
@@ -130,7 +130,7 @@ Ruby 3.1+. Rails is optional. The core is plain Ruby and has no runtime dependen
 
 ## Limitations
 
-0.4.0 wraps declared instance methods at definition time. The explicit singleton API (`contract_singleton` / `extend Contracts`) remains experimental. Static implication proofs for inheritance and deeper Rails instrumentation are intentionally deferred. Deep snapshots (`observe â€¦, deep: true`) are supported for arrays, hashes, and sets.
+0.4.0 wraps declared instance methods at definition time. The explicit singleton API (`contract_singleton` / `extend Contracts`) remains experimental. Static implication proofs for inheritance and deeper Rails instrumentation are intentionally deferred. Deep snapshots (`observe Ã¢â‚¬Â¦, deep: true`) are supported for arrays, hashes, and sets.
 
 ## Development
 
@@ -152,4 +152,8 @@ Run `bundle exec ruby benchmark/runtime_overhead.rb` on the deployment Ruby and 
 
 ## License
 
-**Source-available proprietary** — evaluation under [LICENSE](./LICENSE); commercial / production use via [COMMERCIAL.md](./COMMERCIAL.md). See [LICENSE_TRANSITION_NOTICE.md](./LICENSE_TRANSITION_NOTICE.md).
+**Source-available proprietary** â€” evaluation under [LICENSE](./LICENSE); commercial / production use via [COMMERCIAL.md](./COMMERCIAL.md). See [LICENSE_TRANSITION_NOTICE.md](./LICENSE_TRANSITION_NOTICE.md).
+
+## Acquisition diligence
+
+Buyer-facing diligence materials live in [docs/acquisition/](./docs/acquisition/). Commercial licensing contact path: [COMMERCIAL.md](./COMMERCIAL.md).
