@@ -5,7 +5,7 @@ Gem::Specification.new do |spec|
   spec.summary = "Behavioral contracts for Ruby methods and objects"
   spec.description = "Expressive runtime contracts for parameters, results, state, invariants, exceptions, tuples, and structured hash shapes."
   spec.homepage = "https://github.com/theworker02/contracts-rb"
-  spec.license = "MIT"
+  spec.license = "Proprietary"
   spec.required_ruby_version = ">= 3.1"
   spec.files = Dir[
     "assets/**/*", "lib/**/*.rb", "exe/*", "examples/**/*", "docs/**/*", "README.md", "LICENSE.txt",
