@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="docs/logo.svg" alt="contracts-rb official logo" width="128" height="128">
+</p>
+
 # contracts-rb
 
 
